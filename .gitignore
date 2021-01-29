@@ -27,3 +27,4 @@ wp-cli.local.yml
 
 # Composer
 /vendor/
+/docker/wc-admin-local-dev/wordpress/
