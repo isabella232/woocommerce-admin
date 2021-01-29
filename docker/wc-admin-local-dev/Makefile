@@ -1,4 +1,4 @@
-SERVICE=wpdocker
+SERVICE=wc-admin-local-dev
 
 docker-up: 
 	docker-compose up -d

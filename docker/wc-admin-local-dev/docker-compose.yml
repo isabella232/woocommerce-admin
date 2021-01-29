@@ -18,7 +18,8 @@ services:
       context: .
     volumes:
        - ./wordpress:/opt/wordpress
-       - ./npm_cache:/root/.npm/_cacache
+       - ../..:/opt/wordpress/wp-content/plugins/woocommerce-admin
+       - /opt/wordpress/wp-content/plugins/woocommerce-admin/docker
     links:
       - db
   db:
