@@ -20,6 +20,7 @@ services:
        - ./wordpress:/opt/wordpress
        - ../..:/opt/wordpress/wp-content/plugins/woocommerce-admin
        - /opt/wordpress/wp-content/plugins/woocommerce-admin/docker
+       - ${HOME_DIR}/.npm/_cacache:/root/.npm/_cacache
     links:
       - db
   db:

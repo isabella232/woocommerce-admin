@@ -5,7 +5,7 @@ replace() {
     find=$1
     replace=$2
     filename=$3
-    sed -i "" "s/$find/$replace/" $filename
+    sed -i "" "s~$find~$replace~" $filename
 }
 
 deleteLineStartingWith() {
@@ -53,5 +53,7 @@ replace ":nginx_port" "$nginx_port" "$BASEDIR/.env"
 read -p "Mysql Port (default: 3307): " mysql_port
 mysql_port=${mysql_port:-3307}
 replace ":mysql_port" "$mysql_port" "$BASEDIR/.env"
+
+replace ":home_dir" "$HOME" "$BASEDIR/.env"
 
 chmod -R +x  "$BASEDIR/recipes"
