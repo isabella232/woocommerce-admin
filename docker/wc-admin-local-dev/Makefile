@@ -1,4 +1,4 @@
-SERVICE=wc-admin-local-dev
+SERVICE=woocommerce-admin
 
 docker-up: 
 	docker-compose up -d
