@@ -75,7 +75,9 @@
 		"build-storybook": "build-storybook  -c ./storybook",
 		"changelog": "node ./bin/changelog --changelogSrcType='ZENHUB_RELEASE'",
 		"bump-version": "npm run -s install-if-deps-outdated && php ./bin/update-version.php",
-		"local-dev:config": "bash ./docker/wc-admin-local-dev/config.sh"
+		"local-dev:config": "bash ./docker/wc-admin-local-dev/config.sh",
+		"local-dev:up": "cd docker/wc-admin-local-dev && make docker-up",
+		"local-dev:down": "cd docker/wc-admin-local-dev && make docker-down"
 	},
 	"changelog": {
 		"labelPrefix": "[Type]",
