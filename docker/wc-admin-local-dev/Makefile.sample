@@ -1,0 +1,63 @@
+SERVICE=:service
+
+docker-up: 
+	docker-compose up -d
+docker-stop:
+	docker-compose stop
+docker-logs:
+	docker-compose logs -f
+docker-build:
+	docker-compose build
+docker-ssh: 
+	docker exec -it `docker ps -q --filter ancestor=$(SERVICE)_php` /bin/bash
+
+unit-tests-setup:
+	docker-compose -f docker-compose.phpunit.yml run --rm wordpress_phpunit /app/bin/install-wp-tests.sh wordpress_test root "" db-unit latest true
+unit-tests:
+ifdef filter
+	docker-compose -f docker-compose.phpunit.yml run --rm wordpress_phpunit /bin/bash -c \
+	"cd /opt/wordpress/wp-content/plugins/woocommerce-admin; composer test -- --filter='$(filter)'"
+else
+	docker-compose -f docker-compose.phpunit.yml run --rm wordpress_phpunit /bin/bash -c \
+	"cd /opt/wordpress/wp-content/plugins/woocommerce-admin; composer test"
+endif
+
+unit-tests-up:
+	docker-compose -f docker-compose.phpunit.yml  up -d
+unit-tests-down:
+	docker-compose -f docker-compose.phpunit.yml down
+
+admin-npm-start:
+	docker exec -it `docker ps -q --filter ancestor=$(SERVICE)_php` /bin/bash -c \
+	"cd /opt/wordpress/wp-content/plugins/woocommerce-admin; npm run start"
+admin-composer-install:
+	docker exec -it  `docker ps -q --filter ancestor=$(SERVICE)_php` /bin/bash -c \
+	"cd /opt/wordpress/wp-content/plugins/woocommerce-admin; composer install"
+admin-build-run: 
+	docker exec -it  `docker ps -q --filter ancestor=$(SERVICE)_php` /bin/bash -c \
+	"cd /opt/wordpress/wp-content/plugins/woocommerce-admin; npm run build"
+admin-dev: 
+	docker exec -it  `docker ps -q --filter ancestor=$(SERVICE)_php` /bin/bash -c \
+	"cd /opt/wordpress/wp-content/plugins/woocommerce-admin; npm run dev"
+
+admin-npm-install: 
+	docker exec -it  `docker ps -q --filter ancestor=$(SERVICE)_php` /bin/bash -c \
+	"cd /opt/wordpress/wp-content/plugins/woocommerce-admin; npm install --prefer-offline --no-audit"
+
+composer-install: 
+	docker exec -it  `docker ps -q --filter ancestor=$(SERVICE)_php` /bin/bash -c \
+	"cd /opt/wordpress/wp-content/plugins/woocommerce; composer install"
+build-watch: 
+	docker exec -it  `docker ps -q --filter ancestor=$(SERVICE)_php` /bin/bash -c \
+	"cd /opt/wordpress/wp-content/plugins/woocommerce; npm run build-watch"
+build-assets: 
+	docker exec -it  `docker ps -q --filter ancestor=$(SERVICE)_php` /bin/bash -c \
+	"cd /opt/wordpress/wp-content/plugins/woocommerce; npm run build:assets"
+build: 
+	docker exec -it  `docker ps -q --filter ancestor=$(SERVICE)_php` /bin/bash -c \
+	"cd /opt/wordpress/wp-content/plugins/woocommerce; npm run build"
+npm-install: 
+	docker exec -it  `docker ps -q --filter ancestor=$(SERVICE)_php` /bin/bash -c \
+	"cd /opt/wordpress/wp-content/plugins/woocommerce; npm install"
+
+wc-admin-setup: admin-npm-install admin-dev admin-composer-install
